@@ -4,8 +4,8 @@ const rand = std.rand;
 
 const SCREEN_WIDTH = 500;
 const SCREEN_HEIGHT = 500;
-const CELL_SIZE = 3;
-const TARGET_FPS = 20;
+const CELL_SIZE = 4;
+const TARGET_FPS = 60;
 
 const CellState = enum { Dead, Alive };
 const Vector2 = struct { x: usize, y: usize };
@@ -91,7 +91,7 @@ pub fn main() void {
 
     defer raylib.CloseWindow();
 
-    var grid = Grid(SCREEN_HEIGHT, SCREEN_WIDTH).init();
+    var grid = Grid(SCREEN_HEIGHT / (CELL_SIZE / 2), SCREEN_WIDTH / (CELL_SIZE / 2)).init();
 
     while (!raylib.WindowShouldClose()) {
         raylib.BeginDrawing();
