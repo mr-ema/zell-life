@@ -2,9 +2,10 @@ const raylib = @import("raylib");
 const std = @import("std");
 const rand = std.rand;
 
-const SCREEN_WIDTH = 1280;
-const SCREEN_HEIGHT = 640;
-const TARGET_FPS = 6;
+const SCREEN_WIDTH = 500;
+const SCREEN_HEIGHT = 500;
+const CELL_SIZE = 3;
+const TARGET_FPS = 20;
 
 const CellState = enum { Dead, Alive };
 const Vector2 = struct { x: usize, y: usize };
@@ -90,10 +91,7 @@ pub fn main() void {
 
     defer raylib.CloseWindow();
 
-    const cellSizeX = 10;
-    const cellSizeY = 10;
-
-    var grid = Grid((SCREEN_HEIGHT / cellSizeY), (SCREEN_WIDTH / cellSizeX)).init();
+    var grid = Grid(SCREEN_HEIGHT, SCREEN_WIDTH).init();
 
     while (!raylib.WindowShouldClose()) {
         raylib.BeginDrawing();
@@ -104,11 +102,8 @@ pub fn main() void {
 
         for (grid.grid, 0..) |row, y| {
             for (row, 0..) |state, x| {
-                var posX = x * cellSizeX;
-                var posY = y * cellSizeY;
-
                 if (state == CellState.Alive) {
-                    raylib.DrawRectangle(@intCast(i32, posX), @intCast(i32, posY), cellSizeX, cellSizeY, raylib.BLACK);
+                    raylib.DrawRectangle(@intCast(i32, x * CELL_SIZE / 2), @intCast(i32, y * CELL_SIZE / 2), CELL_SIZE, CELL_SIZE, raylib.BLACK);
                 }
             }
         }
