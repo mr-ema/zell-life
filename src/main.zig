@@ -12,6 +12,7 @@ const TARGET_FPS = 60;
 pub fn main() !void {
     var buf: [256]u8 = undefined;
     var fba = std.heap.FixedBufferAllocator.init(&buf);
+    var stop = false;
 
     raylib.InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "zell-life");
     raylib.SetConfigFlags(raylib.ConfigFlags{ .FLAG_WINDOW_RESIZABLE = true });
@@ -25,6 +26,10 @@ pub fn main() !void {
     var grid = Grid(SCREEN_HEIGHT / CELL_SIZE, SCREEN_WIDTH / CELL_SIZE).init();
 
     while (!raylib.WindowShouldClose()) {
+        if (raylib.IsKeyPressed(.KEY_SPACE)) {
+            stop = !stop;
+        }
+
         // Translate based on mouse right click
         if (raylib.IsMouseButtonDown(.MOUSE_BUTTON_RIGHT)) {
             var delta = raylib.GetMouseDelta();
@@ -72,6 +77,8 @@ pub fn main() !void {
             fba.reset();
         }
 
-        grid.update();
+        if (!stop) {
+            grid.update();
+        }
     }
 }
