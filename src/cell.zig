@@ -26,7 +26,7 @@ pub fn Grid(comptime height: usize, comptime width: usize) type {
 
             for (grid, 0..) |row, i| {
                 for (row, 0..) |_, j| {
-                    const randonState = randomInRange(u8, 0, 1);
+                    const randonState = randomInRange(u8, 0, 9);
                     grid[i][j] = if (randonState == 1) .Alive else .Dead;
                 }
             }
