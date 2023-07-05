@@ -13,6 +13,9 @@ programming language and the Raylib library for graphics.
 </br>
 </br>
 
+## Demo
+![Demo](https://github.com/mr-ema/zell-life/blob/main/docs/demo.gif)
+
 ## Features
 - Generation count each time the grid updates
 - Space to pause the simulation
