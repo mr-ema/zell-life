@@ -6,10 +6,13 @@ const CellState = Cell.CellState;
 
 const SCREEN_WIDTH = 800;
 const SCREEN_HEIGHT = 600;
-const CELL_SIZE = 4;
-const TARGET_FPS = 20;
+const CELL_SIZE = 2;
+const TARGET_FPS = 60;
 
-pub fn main() void {
+pub fn main() !void {
+    var buf: [256]u8 = undefined;
+    var fba = std.heap.FixedBufferAllocator.init(&buf);
+
     raylib.InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "zell-life");
     raylib.SetConfigFlags(raylib.ConfigFlags{ .FLAG_WINDOW_RESIZABLE = true });
     raylib.SetTargetFPS(TARGET_FPS);
@@ -19,7 +22,7 @@ pub fn main() void {
     var camera: raylib.Camera2D = undefined;
     camera.zoom = 1.0;
 
-    var grid = Grid(SCREEN_HEIGHT / (CELL_SIZE / 2), SCREEN_WIDTH / (CELL_SIZE / 2)).init();
+    var grid = Grid(SCREEN_HEIGHT / CELL_SIZE, SCREEN_WIDTH / CELL_SIZE).init();
 
     while (!raylib.WindowShouldClose()) {
         // Translate based on mouse right click
@@ -46,20 +49,28 @@ pub fn main() void {
             }
         }
 
-        raylib.BeginDrawing();
-        defer raylib.EndDrawing();
+        {
+            raylib.BeginDrawing();
+            defer raylib.EndDrawing();
 
-        raylib.ClearBackground(raylib.RAYWHITE);
+            raylib.ClearBackground(raylib.RAYWHITE);
 
-        raylib.BeginMode2D(camera);
-        for (grid.grid, 0..) |row, y| {
-            for (row, 0..) |state, x| {
-                if (state == .Alive) {
-                    raylib.DrawRectangle(@intCast(i32, x * CELL_SIZE), @intCast(i32, y * CELL_SIZE), CELL_SIZE, CELL_SIZE, raylib.BLACK);
+            {
+                raylib.BeginMode2D(camera);
+                defer raylib.EndMode2D();
+
+                for (grid.grid, 0..) |row, y| {
+                    for (row, 0..) |state, x| {
+                        if (state == .Alive) {
+                            raylib.DrawRectangle(@intCast(i32, x * CELL_SIZE), @intCast(i32, y * CELL_SIZE), CELL_SIZE, CELL_SIZE, raylib.BLACK);
+                        }
+                    }
                 }
             }
+
+            raylib.DrawText(try raylib.TextFormat(fba.allocator(), "Gen: {d}", .{grid.gen}), 10, 10, 20, raylib.DARKBLUE);
+            fba.reset();
         }
-        raylib.EndMode2D();
 
         grid.update();
     }

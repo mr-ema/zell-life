@@ -18,6 +18,7 @@ pub fn Grid(comptime height: usize, comptime width: usize) type {
 
         height: usize,
         width: usize,
+        gen: u64,
         grid: [height][width]CellState,
 
         pub fn init() Self {
@@ -26,11 +27,11 @@ pub fn Grid(comptime height: usize, comptime width: usize) type {
             for (grid, 0..) |row, i| {
                 for (row, 0..) |_, j| {
                     const randonState = randomInRange(u8, 0, 1);
-                    grid[i][j] = if (randonState == 1) .Alive else .Dead;
+                    grid[i][j] = if (randonState == 0) .Dead else .Alive;
                 }
             }
 
-            return Self{ .height = height, .width = width, .grid = grid };
+            return Self{ .height = height, .width = width, .grid = grid, .gen = 1 };
         }
 
         fn countAliveNeighbors(self: *Self, c: Vector2) u8 {
@@ -41,9 +42,11 @@ pub fn Grid(comptime height: usize, comptime width: usize) type {
             var cx = if (c.x <= 1) 1 else c.x - 1;
             var cy = if (c.y <= 1) 1 else c.y - 1;
 
-            for (neighbors) |dx| {
-                for (neighbors) |dy| {
-                    if (self.grid[cx + dx - 1][cy + dy - 1] == .Alive) {
+            for (neighbors) |dy| {
+                for (neighbors) |dx| {
+                    const state = self.grid[cy + dy - 1][cx + dx - 1];
+
+                    if (state == .Alive) {
                         count += 1;
                     }
                 }
@@ -61,19 +64,20 @@ pub fn Grid(comptime height: usize, comptime width: usize) type {
 
             var new_grid: [height][width]CellState = undefined;
 
-            for (self.grid, 0..) |row, i| {
-                for (row, 0..) |cell, j| {
-                    var neighbors = countAliveNeighbors(self, Vector2{ .x = i, .y = j });
+            for (self.grid, 0..) |row, y| {
+                for (row, 0..) |cell, x| {
+                    var neighbors = countAliveNeighbors(self, Vector2{ .x = x, .y = y });
 
                     if (cell == .Dead) {
-                        new_grid[i][j] = if (neighbors == 3) .Alive else .Dead;
+                        new_grid[y][x] = if (neighbors == 3) .Alive else .Dead;
                     } else {
-                        new_grid[i][j] = if (neighbors < 2 or neighbors > 3) .Dead else .Alive;
+                        new_grid[y][x] = if (neighbors < 2 or neighbors > 3) .Dead else .Alive;
                     }
                 }
             }
 
             self.grid = new_grid;
+            self.gen +%= 1;
         }
     };
 }
