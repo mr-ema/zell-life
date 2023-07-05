@@ -13,6 +13,14 @@ programming language and the Raylib library for graphics.
 </br>
 </br>
 
+## Features
+- Generation count each time the grid updates
+- Space to pause the simulation
+- Zoom
+
+</br>
+</br>
+
 ## Run
 ```
 git clone --recurse-submodules https://github.com/mr-ema/zell-life
