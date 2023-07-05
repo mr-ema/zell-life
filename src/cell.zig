@@ -27,7 +27,7 @@ pub fn Grid(comptime height: usize, comptime width: usize) type {
             for (grid, 0..) |row, i| {
                 for (row, 0..) |_, j| {
                     const randonState = randomInRange(u8, 0, 1);
-                    grid[i][j] = if (randonState == 0) .Dead else .Alive;
+                    grid[i][j] = if (randonState == 1) .Alive else .Dead;
                 }
             }
 
@@ -36,15 +36,15 @@ pub fn Grid(comptime height: usize, comptime width: usize) type {
 
         fn countAliveNeighbors(self: *Self, c: Vector2) u8 {
             var count: u8 = 0;
-            const neighbors = [_]usize{ 0, 1, 2 };
+            const dx = [_]i8{ -1, 0, 1, -1, 1, -1, 0, 1 };
+            const dy = [_]i8{ -1, -1, -1, 0, 0, 1, 1, 1 };
 
-            // temporal fix
-            var cx = if (c.x <= 1) 1 else c.x - 1;
-            var cy = if (c.y <= 1) 1 else c.y - 1;
+            for (dx, 0..) |_, i| {
+                const nx = @intCast(isize, c.x) + dx[i];
+                const ny = @intCast(isize, c.y) + dy[i];
 
-            for (neighbors) |dy| {
-                for (neighbors) |dx| {
-                    const state = self.grid[cy + dy - 1][cx + dx - 1];
+                if (nx >= 0 and nx < self.width and ny >= 0 and ny < self.height) {
+                    const state = self.grid[@intCast(usize, ny)][@intCast(usize, nx)];
 
                     if (state == .Alive) {
                         count += 1;
