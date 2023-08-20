@@ -67,7 +67,7 @@ pub fn main() !void {
                 for (grid.grid, 0..) |row, y| {
                     for (row, 0..) |state, x| {
                         if (state == .Alive) {
-                            raylib.DrawRectangle(@intCast(i32, x * CELL_SIZE), @intCast(i32, y * CELL_SIZE), CELL_SIZE, CELL_SIZE, raylib.BLACK);
+                            raylib.DrawRectangle(@intCast(x * CELL_SIZE), @intCast(y * CELL_SIZE), CELL_SIZE, CELL_SIZE, raylib.BLACK);
                         }
                     }
                 }

@@ -5,7 +5,8 @@ const Vector2 = struct { x: usize, y: usize };
 pub const CellState = enum { Dead, Alive };
 
 fn randomInRange(comptime T: type, min: T, max: T) T {
-    const seed = @truncate(u64, @bitCast(u128, std.time.nanoTimestamp()));
+    const time: u128 = @bitCast(std.time.nanoTimestamp());
+    const seed: u64 = @truncate(time);
     var prng = rand.DefaultPrng.init(seed);
 
     const result = prng.random().intRangeAtMost(T, min, max);
@@ -40,11 +41,11 @@ pub fn Grid(comptime height: usize, comptime width: usize) type {
             const dy = [_]i8{ -1, -1, -1, 0, 0, 1, 1, 1 };
 
             for (dx, 0..) |_, i| {
-                const nx = @intCast(isize, c.x) + dx[i];
-                const ny = @intCast(isize, c.y) + dy[i];
+                const nx: isize = @intCast(@as(isize, @intCast(c.x)) + dx[i]);
+                const ny: isize = @intCast(@as(isize, @intCast(c.y)) + dy[i]);
 
                 if (nx >= 0 and nx < self.width and ny >= 0 and ny < self.height) {
-                    const state = self.grid[@intCast(usize, ny)][@intCast(usize, nx)];
+                    const state = self.grid[@intCast(ny)][@intCast(nx)];
 
                     if (state == .Alive) {
                         count += 1;
