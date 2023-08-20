@@ -20,9 +20,11 @@ programming language and the Raylib library for graphics.
 </br>
 
 ## Features
-- Generation count each time the grid updates
-- Space to pause the simulation
-- Zoom
+- [x] Generation counting
+- [x] Pause the simulation (with <scape> key)
+- [x] Zoom in and out
+- [ ] Custom patterns
+- [ ] Configurable speed
 
 </br>
 </br>
