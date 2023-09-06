@@ -7,7 +7,7 @@ programming language and the Raylib library for graphics.
 
 ## Resources
 - [Zig](https://ziglang.org)
-= [Awesome Zig](https://github.com/C-BJ/awesome-zig)
+- [Awesome Zig](https://github.com/C-BJ/awesome-zig)
 - [Raylib](https://www.raylib.com)
 - [Zig Raylib Bindings](https://github.com/ryupold/raylib.zig)
 - [Zig Showdown](https://github.com/zig-community/Zig-Showdown)
