@@ -82,3 +82,11 @@ pub fn toggleCellState(self: *Self, row: usize, col: usize) error{OutOfBounds}!v
     const cell = self.grid[col][row];
     self.grid[col][row] = if (cell == .Dead) .Alive else .Dead;
 }
+
+pub fn cellPurgeProtocol(self: *Self) void {
+    for (self.grid, 0..) |row, i| {
+        for (row, 0..) |_, j| {
+            self.grid[i][j] = .Dead;
+        }
+    }
+}
