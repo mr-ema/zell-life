@@ -89,4 +89,6 @@ pub fn cellPurgeProtocol(self: *Self) void {
             self.grid[i][j] = .Dead;
         }
     }
+
+    self.gen = 0;
 }
