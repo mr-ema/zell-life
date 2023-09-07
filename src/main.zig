@@ -3,19 +3,16 @@ const std = @import("std");
 
 const Game = @import("Game.zig");
 const Resources = @import("Resources.zig");
-
-const SCREEN_WIDTH = 1280;
-const SCREEN_HEIGHT = 620;
-const TARGET_FPS = 60;
+const Config = @import("ConfigFile.zig");
 
 pub fn main() !void {
     var resources = Resources.init();
     var game = try Game.init(&resources);
     defer game.deinit();
 
-    raylib.InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "zell-life");
+    raylib.InitWindow(Config.video.resolution[0], Config.video.resolution[1], "zell-life");
     raylib.SetConfigFlags(raylib.ConfigFlags{ .FLAG_WINDOW_RESIZABLE = true });
-    raylib.SetTargetFPS(TARGET_FPS);
+    raylib.SetTargetFPS(Config.video.target_fps);
 
     defer raylib.CloseWindow();
 
