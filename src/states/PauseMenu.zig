@@ -3,6 +3,7 @@ const raylib = @import("raylib");
 
 const Self = @This();
 const Game = @import("../Game.zig");
+const Input = @import("../Input.zig");
 
 // TODO: add option to purge all the cells. (GameOfLife.cellPurgeProtocol())
 // TODO: add option to resume game of life.
@@ -15,11 +16,11 @@ pub fn deinit(self: *Self) void {
     self.* = undefined;
 }
 
-pub fn update(self: *Self, total_time: f32, delta_time: f32) !void {
+pub fn update(self: *Self, input: Input, total_time: f32, delta_time: f32) !void {
     _ = total_time;
     _ = delta_time;
 
-    if (raylib.IsKeyPressed(.KEY_SPACE)) {
+    if (input.isAnyHit()) {
         Game.fromComponent(self).switchToState(.gameplay);
     }
 }

@@ -5,6 +5,7 @@ const FixedBufferAllocator = std.heap.FixedBufferAllocator;
 const Self = @This();
 const Game = @import("../Game.zig");
 const Resources = @import("../Resources.zig");
+const Input = @import("../Input.zig");
 const GameOfLife = @import("../GameOfLife.zig");
 
 var buf: [256]u8 = undefined;
@@ -22,15 +23,15 @@ pub fn deinit(self: *Self) void {
     self.* = undefined;
 }
 
-pub fn update(self: *Self, total_time: f32, delta_time: f32) !void {
+pub fn update(self: *Self, input: Input, total_time: f32, delta_time: f32) !void {
     _ = total_time;
     _ = delta_time;
 
-    if (raylib.IsKeyPressed(.KEY_SPACE)) {
+    if (input.isKeyPressed(.toggle_stop)) {
         Game.fromComponent(self).switchToState(.freeze_time);
-    } else if (raylib.IsKeyPressed(.KEY_E)) {
+    } else if (input.isKeyPressed(.toggle_edit)) {
         Game.fromComponent(self).switchToState(.edit_grid);
-    } else if (raylib.IsKeyPressed(.KEY_K)) {
+    } else if (input.isKeyPressed(.purge_life)) {
         self.resources.gol.cellPurgeProtocol();
     }
 
@@ -66,7 +67,10 @@ pub fn render(self: *Self, total_time: f32, delta_time: f32) !void {
     _ = delta_time;
 
     raylib.BeginDrawing();
-    defer raylib.EndDrawing();
+    defer {
+        raylib.EndDrawing();
+        self.fba.reset();
+    }
 
     raylib.ClearBackground(raylib.RAYWHITE);
 
@@ -84,5 +88,4 @@ pub fn render(self: *Self, total_time: f32, delta_time: f32) !void {
     }
 
     raylib.DrawText(try raylib.TextFormat(self.fba.allocator(), "Gen: {d}", .{self.resources.gol.gen}), 10, 10, 20, raylib.DARKBLUE);
-    self.fba.reset();
 }

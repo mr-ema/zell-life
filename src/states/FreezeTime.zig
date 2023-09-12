@@ -5,6 +5,7 @@ const FixedBufferAllocator = std.heap.FixedBufferAllocator;
 const Self = @This();
 const Game = @import("../Game.zig");
 const Resources = @import("../Resources.zig");
+const Input = @import("../Input.zig");
 const GameOfLife = @import("../GameOfLife.zig");
 
 var buf: [256]u8 = undefined;
@@ -22,11 +23,11 @@ pub fn deinit(self: *Self) void {
     self.* = undefined;
 }
 
-pub fn update(self: *Self, total_time: f32, delta_time: f32) !void {
+pub fn update(self: *Self, input: Input, total_time: f32, delta_time: f32) !void {
     _ = total_time;
     _ = delta_time;
 
-    if (raylib.IsKeyPressed(.KEY_SPACE)) {
+    if (input.isKeyPressed(.toggle_stop)) {
         Game.fromComponent(self).switchToState(.gameplay);
     }
 

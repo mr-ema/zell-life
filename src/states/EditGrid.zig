@@ -4,6 +4,7 @@ const raylib = @import("raylib");
 const Self = @This();
 const Game = @import("../Game.zig");
 const Resources = @import("../Resources.zig");
+const Input = @import("../Input.zig");
 const GameOfLife = @import("../GameOfLife.zig");
 
 resources: *Resources,
@@ -19,11 +20,11 @@ pub fn deinit(self: *Self) void {
     self.* = undefined;
 }
 
-pub fn update(self: *Self, total_time: f32, delta_time: f32) !void {
+pub fn update(self: *Self, input: Input, total_time: f32, delta_time: f32) !void {
     _ = total_time;
     _ = delta_time;
 
-    if (raylib.IsKeyPressed(.KEY_E)) {
+    if (input.isKeyPressed(.toggle_edit)) {
         Game.fromComponent(self).switchToState(.gameplay);
     }
 

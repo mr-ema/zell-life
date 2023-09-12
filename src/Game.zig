@@ -2,6 +2,7 @@ const std = @import("std");
 
 const Self = @This();
 const Resources = @import("Resources.zig");
+const Input = @import("Input.zig");
 
 const initial_state = State.gameplay;
 
@@ -84,7 +85,7 @@ fn callOnState(self: *Self, state: State, comptime fun: []const u8, args: anytyp
     }
 }
 
-pub fn update(self: *Self, delta_time: f32) !void {
+pub fn update(self: *Self, input: Input, delta_time: f32) !void {
     defer self.update_time += delta_time;
 
     if (self.next_state != null) {
@@ -107,7 +108,7 @@ pub fn update(self: *Self, delta_time: f32) !void {
     }
 
     switch (self.current_state) {
-        .state => |state| try self.callOnState(state, "update", .{ self.update_time, delta_time }),
+        .state => |state| try self.callOnState(state, "update", .{ input, self.update_time, delta_time }),
         .transition => {}, // do not update game logic in transitions
     }
 }

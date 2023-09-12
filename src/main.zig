@@ -4,8 +4,10 @@ const std = @import("std");
 const Game = @import("Game.zig");
 const Resources = @import("Resources.zig");
 const Config = @import("ConfigFile.zig");
+const Input = @import("Input.zig");
 
 pub fn main() !void {
+    const input = Input.init(Config.keymap);
     var resources = Resources.init();
     var game = try Game.init(&resources);
     defer game.deinit();
@@ -17,7 +19,7 @@ pub fn main() !void {
     defer raylib.CloseWindow();
 
     while (!raylib.WindowShouldClose()) {
-        try game.update(0);
+        try game.update(input, 0);
         try game.render(0);
     }
 }
