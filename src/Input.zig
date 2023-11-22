@@ -1,42 +1,67 @@
 const raylib = @import("raylib");
+const ActionMap = @import("ConfigFile.zig").ActionMap;
 
 const Self = @This();
-const KeyMapping = @import("ConfigFile.zig").KeyMapping;
+const KeyboardKey = raylib.KeyboardKey;
+const MouseButton = raylib.MouseButton;
 
-keymap: KeyMapping,
+action_map: *ActionMap,
 
-const KeyAction = enum(usize) {
-    none = 0,
+pub const Actions = enum(usize) {
+    none = 0x00,
+
     toggle_menu,
     toggle_edit,
     purge_life,
-    toggle_stop,
+    toggle_pause,
+    translate_cam,
+    zoom_in,
+    zoom_out,
 };
 
-fn mapAction(self: Self, key_action: KeyAction) raylib.KeyboardKey {
-    switch (key_action) {
-        .none => return self.keymap.none,
+pub const InputBinding = union(enum) {
+    key: KeyboardKey,
+    mouse_button: MouseButton,
+};
 
-        .toggle_menu => return self.keymap.toggle_menu,
-        .toggle_edit => return self.keymap.toggle_edit,
-        .purge_life => return self.keymap.purge_life,
-        .toggle_stop => return self.keymap.toggle_stop,
+pub fn init(action_map: *ActionMap) Self {
+    return Self{ .action_map = action_map };
+}
+
+pub fn isActionPressed(self: Self, action: Actions) bool {
+    const input = self.mapActionToInput(action);
+    var should_fire: bool = false;
+
+    switch (input) {
+        .key => should_fire = raylib.IsKeyDown(input.key),
+        .mouse_button => should_fire = raylib.IsMouseButtonDown(input.mouse_button),
     }
+
+    return should_fire;
 }
 
-pub fn init(keymap: KeyMapping) Self {
-    return Self{ .keymap = keymap };
+pub fn isActionJustPressed(self: Self, action: Actions) bool {
+    const input = self.mapActionToInput(action);
+    var should_fire: bool = false;
+
+    switch (input) {
+        .key => should_fire = raylib.IsKeyPressed(input.key),
+        .mouse_button => should_fire = raylib.IsMouseButtonPressed(input.mouse_button),
+    }
+
+    return should_fire;
 }
 
-pub fn isKeyPressed(self: Self, key_action: KeyAction) bool {
-    const key = self.mapAction(key_action);
-    const result: bool = raylib.IsKeyPressed(key);
+fn mapActionToInput(self: Self, action: Actions) InputBinding {
+    switch (action) {
+        .none => return self.action_map.get("none").?,
 
-    return result;
-}
-
-pub fn isAnyHit(self: Self) bool {
-    _ = self;
-
-    return false;
+        .toggle_menu => return self.action_map.get("toggle_menu").?,
+        .toggle_edit => return self.action_map.get("toggle_edit").?,
+        .toggle_pause => return self.action_map.get("toggle_pause").?,
+        .purge_life => return self.action_map.get("purge_life").?,
+        .translate_cam => return self.action_map.get("translate_cam").?,
+        .zoom_in => return self.action_map.get("zoom_in").?,
+        .zoom_out => return self.action_map.get("zoom_out").?,
+    }
 }

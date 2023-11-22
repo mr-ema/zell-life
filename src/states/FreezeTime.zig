@@ -27,32 +27,22 @@ pub fn update(self: *Self, input: Input, total_time: f32, delta_time: f32) !void
     _ = total_time;
     _ = delta_time;
 
-    if (input.isKeyPressed(.toggle_stop)) {
+    if (input.isActionJustPressed(.toggle_pause)) {
         Game.fromComponent(self).switchToState(.gameplay);
     }
 
-    // Translate based on mouse right click
-    if (raylib.IsMouseButtonDown(.MOUSE_BUTTON_RIGHT)) {
+    if (input.isActionPressed(.translate_cam)) {
         var delta = raylib.GetMouseDelta();
         delta = raylib.Vector2Scale(delta, -1.0 / self.cam.zoom);
 
         self.cam.target = raylib.Vector2Add(self.cam.target, delta);
     }
 
-    // Zoom based on mouse wheel
     var wheel: f32 = raylib.GetMouseWheelMove();
-    if (wheel != 0) {
-        var mouse_world_pos = raylib.GetScreenToWorld2D(raylib.GetMousePosition(), self.cam.*);
-
-        self.cam.offset = raylib.GetMousePosition();
-
-        self.cam.target = mouse_world_pos;
-
-        const zoom_increment: f32 = 0.125;
-        self.cam.zoom += (wheel * zoom_increment);
-        if (self.cam.zoom < zoom_increment) {
-            self.cam.zoom = zoom_increment;
-        }
+    if (input.isActionPressed(.zoom_in) or wheel > 0) {
+        self.resources.zoomIn();
+    } else if (input.isActionPressed(.zoom_out) or wheel < 0) {
+        self.resources.zoomOut();
     }
 }
 

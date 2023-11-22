@@ -20,7 +20,7 @@ pub fn update(self: *Self, input: Input, total_time: f32, delta_time: f32) !void
     _ = total_time;
     _ = delta_time;
 
-    if (input.isAnyHit()) {
+    if (input.isActionJustPressed(.toggle_menu)) {
         Game.fromComponent(self).switchToState(.gameplay);
     }
 }
