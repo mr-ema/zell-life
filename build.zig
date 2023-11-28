@@ -1,5 +1,6 @@
 const std = @import("std");
 const raylib = @import("libs/raylib/build.zig");
+const raygui = @import("libs/raygui/build.zig");
 
 pub fn build(b: *std.Build) !void {
     const target = b.standardTargetOptions(.{});
@@ -14,6 +15,7 @@ pub fn build(b: *std.Build) !void {
 
     // Add raylib
     raylib.addTo(b, exe, target, optimize);
+    raygui.addTo(b, exe, target, optimize);
 
     b.installArtifact(exe);
 
