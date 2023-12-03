@@ -48,8 +48,8 @@ programming language and the Raylib library for graphics.
 | Toggle Edit Mode                  | `<E>`                             |
 | Zoom In                           | `<=>` or `<WHEEL>`                |
 | Zoom Out                          | `<->` or `<WHEEL>`                |
-| Move Cam Around                   | `<MOUSE LEFT>`                    |
-| Toggle Cell State  (Edit Mode)    | `<MOUSE RIGHT>`                   |
+| Move Cam Around                   | `<MOUSE RIGHT>`                   |
+| Toggle Cell State  (Edit Mode)    | `<MOUSE LEFT>`                    |
 
 </br>
 </br>
