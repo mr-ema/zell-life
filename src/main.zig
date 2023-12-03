@@ -33,7 +33,7 @@ pub fn main() !void {
             config.video.resolution[1] = @intCast(raylib.GetScreenHeight());
         }
 
-        try game.update(input, 0);
-        try game.render(0);
+        try game.update(input, raylib.GetFrameTime());
+        try game.render(raylib.GetFrameTime());
     }
 }

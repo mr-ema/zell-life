@@ -1,5 +1,6 @@
 const std = @import("std");
 const raylib = @import("raylib");
+const raygui = @import("raygui");
 
 const FixedBufferAllocator = std.heap.FixedBufferAllocator;
 
@@ -26,8 +27,6 @@ pub fn deinit(self: *Self) void {
 
 pub fn update(self: *Self, input: Input, total_time: f32, delta_time: f32) !void {
     _ = total_time;
-    _ = delta_time;
-
     if (input.isActionJustPressed(.toggle_pause)) {
         Game.fromComponent(self).switchToState(.freeze_time);
     } else if (input.isActionJustPressed(.toggle_edit)) {
@@ -47,7 +46,7 @@ pub fn update(self: *Self, input: Input, total_time: f32, delta_time: f32) !void
         Commands.zoomOut(self.cam);
     }
 
-    self.resources.gol.update();
+    self.resources.gol.update(delta_time);
 }
 
 pub fn render(self: *Self, total_time: f32, delta_time: f32) !void {
@@ -75,5 +74,21 @@ pub fn render(self: *Self, total_time: f32, delta_time: f32) !void {
         }
     }
 
+    // Render GUI elements without the camera's transformation
+    drawUserInterface(self);
+
     raylib.DrawText(try raylib.TextFormat(fba.allocator(), "Gen: {d}", .{self.resources.gol.gen}), 10, 10, 20, raylib.DARKBLUE);
+}
+
+fn drawUserInterface(self: *Self) void {
+    // Draw a box container for elements
+    const start_x = raylib.GetScreenWidth() - 300;
+    raylib.DrawLine(start_x, 0, start_x, raylib.GetScreenHeight(), raylib.Fade(raylib.LIGHTGRAY, 0.6));
+    raylib.DrawRectangle(start_x, 0, start_x + 300, raylib.GetScreenHeight(), raylib.Fade(raylib.LIGHTGRAY, 0.8));
+
+    // Speed element
+    var slider_box: raylib.Rectangle = .{ .x = 0.0, .y = 20.0, .width = 120, .height = 30 };
+    slider_box.x = @as(f32, @floatFromInt(raylib.GetScreenWidth())) - slider_box.width - 50;
+
+    _ = raygui.GuiSliderBar(slider_box, "Speed", "", &self.resources.gol.update_speed, 1.0, 60.0);
 }

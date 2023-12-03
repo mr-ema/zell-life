@@ -8,8 +8,10 @@ const CellState = enum { Dead, Alive };
 const rows = 500;
 const cols = 500;
 
-gen: u64 = 1,
+var elapsed_time: f32 = 0.0;
 
+gen: u64 = 1,
+update_speed: f32 = 60.0,
 grid: [rows][cols]CellState = undefined,
 
 pub fn init() Self {
@@ -49,7 +51,10 @@ fn countAliveNeighbors(self: *Self, c: Vector2) u8 {
     return count;
 }
 
-pub fn update(self: *Self) void {
+pub fn update(self: *Self, delta_time: f32) void {
+    elapsed_time += delta_time;
+    if (elapsed_time < 1.0 / self.update_speed) return;
+
     // Rules:
     // 1. Any live cell with fewer than two live neighbors dies, as if by underpopulation.
     // 2. Any live cell with two or three live neighbors survives to the next generation.
@@ -72,6 +77,8 @@ pub fn update(self: *Self) void {
 
     self.grid = new_grid;
     self.gen +%= 1;
+
+    elapsed_time = 0.0;
 }
 
 pub fn toggleCellState(self: *Self, row: usize, col: usize) error{OutOfBounds}!void {
