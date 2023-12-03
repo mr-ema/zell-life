@@ -5,6 +5,15 @@ programming language and the Raylib library for graphics.
 </br>
 </br>
 
+## Navigation
+- [Demo](#demo)
+- [Features](#features)
+- [Default Bindings](#default-bindings)
+- [How To Build](#how-to-build-and-run-it)
+
+</br>
+</br>
+
 ## Resources
 - [My DockerFile For Raylib Projects](https://gist.github.com/mr-ema/d78ec7fefb8ea1ed8b2907eb2f0dc9da)
 - [Zig](https://ziglang.org)
@@ -17,17 +26,30 @@ programming language and the Raylib library for graphics.
 </br>
 
 ## Features
-- [x] Generation counting
 - [x] Pause the simulation (with <scape> key)
 - [x] Zoom in and out
+- [x] Configurable speed
 - [ ] Custom patterns
-- [ ] Configurable speed
 
 </br>
 </br>
 
 ## Demo
 ![Demo](https://github.com/mr-ema/zell-life/blob/main/docs/demo.gif)
+
+</br>
+</br>
+
+## Default Bindings
+| Action                            |  Binding                          |
+| --------------------------------- | --------------------------------- |
+| Pause Simulation                  | `<SPACE>`                         |
+| Purge Life                        | `<K>`                             |
+| Toggle Edit Mode                  | `<E>`                             |
+| Zoom In                           | `<=>` or `<WHEEL>`                |
+| Zoom Out                          | `<->` or `<WHEEL>`                |
+| Move Cam Around                   | `<MOUSE LEFT>`                    |
+| Toggle Cell State  (Edit Mode)    | `<MOUSE RIGHT>`                   |
 
 </br>
 </br>
