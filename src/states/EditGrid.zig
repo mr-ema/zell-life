@@ -28,7 +28,8 @@ pub fn update(self: *Self, input: Input, total_time: f32, delta_time: f32) !void
         Game.fromComponent(self).switchToState(.gameplay);
     }
 
-    if (raylib.IsMouseButtonDown(.MOUSE_BUTTON_LEFT)) {
+    // TODO: Put some cool down to avoid buggy behavior
+    if (input.isActionPressed(.toggle_cell_state)) {
         const mouse_screen_pos = raylib.GetMousePosition();
         var mouse_world_pos = raylib.GetScreenToWorld2D(mouse_screen_pos, self.cam.*);
 

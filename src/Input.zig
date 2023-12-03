@@ -17,6 +17,7 @@ pub const Actions = enum(usize) {
     translate_cam,
     zoom_in,
     zoom_out,
+    toggle_cell_state,
 };
 
 pub const InputBinding = union(enum) {
@@ -63,5 +64,6 @@ fn mapActionToInput(self: Self, action: Actions) InputBinding {
         .translate_cam => return self.action_map.get("translate_cam").?,
         .zoom_in => return self.action_map.get("zoom_in").?,
         .zoom_out => return self.action_map.get("zoom_out").?,
+        .toggle_cell_state => return self.action_map.get("toggle_cell_state").?,
     }
 }

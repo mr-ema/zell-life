@@ -36,6 +36,7 @@ pub fn init() !Self {
     try self.action_map.put("translate_cam", .{ .mouse_button = .MOUSE_BUTTON_RIGHT });
     try self.action_map.put("zoom_in", .{ .key = .KEY_EQUAL });
     try self.action_map.put("zoom_out", .{ .key = .KEY_MINUS });
+    try self.action_map.put("toggle_cell_state", .{ .mouse_button = .MOUSE_BUTTON_LEFT });
 
     return self;
 }
