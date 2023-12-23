@@ -7,12 +7,16 @@ const Config = @import("ConfigFile.zig");
 const Input = @import("Input.zig");
 
 pub fn main() !void {
-    var resources = Resources.init();
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    var allocator = gpa.allocator();
+
+    var resources = try Resources.init(&allocator);
     var config = try Config.init();
     var game = try Game.init(&resources);
     const input = Input.init(&config.action_map);
 
     defer {
+        resources.deinit(&allocator);
         game.deinit();
         config.deinit();
     }

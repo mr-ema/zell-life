@@ -73,7 +73,7 @@ pub fn render(self: *Self, total_time: f32, delta_time: f32) !void {
 
         for (self.resources.gol.grid, 0..) |row, y| {
             for (row, 0..) |state, x| {
-                if (state == .Alive) {
+                if (state == 1) {
                     raylib.DrawPixel(@intCast(x), @intCast(y), raylib.BLACK);
                 }
             }
